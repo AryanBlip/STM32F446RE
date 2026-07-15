@@ -17,8 +17,9 @@
  */
 
 #include <stdint.h>
+#include <stdbool.h>
 #include "stm32f446xx.h"
-
+void configureLD2();
 
 #if !defined(__SOFT_FP__) && defined(__ARM_FP)
   #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
@@ -102,14 +103,14 @@ void configureUART1(void){
 
 	USART1_CR3 |= USART1_CR3_ONEBIT;
 
-	// SET BAUD RATE TO 115200
-	USART1_BRR = 139;
+	// Change from 139 (for 115200) to 1667 (for 9600)
+	USART1_BRR = 1667;
 
 	//ENABLE UART
-	USART1_CR1 &= ~( USART1_CR1_UE  //ENABLE UART1 (BIT 0)
-					| USART1_CR1_RE  // ENABLE RECEIVER (BIT 2)
-			        | USART1_CR1_TE   // ENABLE TRANSMITTER (BIT 3)
-					);
+	USART1_CR1 |= ( USART1_CR1_UE   // ENABLE UART1
+	              | USART1_CR1_RE   // ENABLE RECEIVER
+	              | USART1_CR1_TE   // ENABLE TRANSMITTER
+	              );
 }
 
 /*
@@ -163,23 +164,54 @@ void initUART(void){
 
 	// CONFIGURE UART1
 	configureUART1();
+
+	//CONFIGURE LD2
+	configureLD2();
 }
 
-void BLINK_LD2(void);
+void LD2_ON(){
+	LD2 |= (1 << 5);
+}
+
+void LD2_OFF(){
+	LD2 &= ~(1 << 5);
+}
 
 int main(void)
 {
 	// SET UP UART
 	initUART();
 
-	BLINK_LD2();
+	// INITIALLY OFF
+	bool LD2_STATUS = 0;
 
 	while (1){
-		if (receiveUART() > 0){
-			transmitUART(85);
+		uint8_t received_char = receiveUART();
+		// Check if we actually received a character (value is greater than 0)
+		if (received_char > 0){
+
+			// If the user typed the character '0' (ASCII 48)
+			if (received_char == '0' && LD2_STATUS == 1){
+
+				// LIGHT OFF
+				LD2_STATUS = 0;
+				LD2_OFF();
+				transmitUART_String("LIGHTS OFF\n");
+
+			} else if (((received_char >= '1' && received_char <= '9') ||
+					   (received_char >= 'a' && received_char <= 'z') ||
+					   (received_char >= 'A' && received_char <= 'Z')) && LD2_STATUS == 0) {
+
+				// LIGHT ON
+				LD2_STATUS = 1;
+				LD2_ON();
+				transmitUART_String("LIGHTS ON\n");
+
+			} else if (LD2_STATUS == 1){
+				transmitUART_String("LIGHTS ARE ALREADY ON\n");
+			} else if (LD2_STATUS == 0){
+				transmitUART_String("LIGHTS ARE ALREADY OFF\n");
+			}
 		}
 	}
-	//BLINK_LD2();
-
-
 }
