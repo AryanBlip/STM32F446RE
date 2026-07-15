@@ -1,0 +1,1 @@
+Src/BLINK_LD2_SELF.o: ../Src/BLINK_LD2_SELF.c

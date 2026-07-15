@@ -43,6 +43,9 @@
 #define USART1_CR3_IREN		(0x01UL << 1)   // BIT 1
 #define USART1_CR3_ONEBIT	(0x01 << 11) // BIT 11
 
-
 #define USART_ISR_TXE 		(1UL << 7)
 #define USART_ISR_RXNE 		(1UL << 5)
+
+
+// LD2 OUTPUT REGISTER
+#define LD2 (*(volatile uint32_t*) 0x40020014)
