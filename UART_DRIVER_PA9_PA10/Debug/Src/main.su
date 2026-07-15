@@ -1,0 +1,12 @@
+../Src/main.c:32:6:initClocks	4	static
+../Src/main.c:41:6:configPinMode	4	static
+../Src/main.c:55:6:setAF	4	static
+../Src/main.c:71:6:configUart1Pins	8	static
+../Src/main.c:84:6:configureUART1	4	static
+../Src/main.c:122:9:receiveUART	16	static
+../Src/main.c:138:6:transmitUART	16	static
+../Src/main.c:146:6:transmitUART_String	16	static
+../Src/main.c:157:6:initUART	8	static
+../Src/main.c:172:6:LD2_ON	4	static
+../Src/main.c:176:6:LD2_OFF	4	static
+../Src/main.c:180:5:main	16	static
