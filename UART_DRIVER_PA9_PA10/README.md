@@ -28,7 +28,7 @@ It checks the USART1 status flags and changes the state of the LD2 LED based on 
 
 The initialization and runtime flow follow a deterministic register-level sequence:
 
-### 1. Clock Initialization (`initClocks`)
+### 1. Clock Initialization (initClocks())
 * Enables the clock for **GPIOA** by setting Bit 0 (`RCC_AHB1ENR_GPIOAEN`) in the `RCC_AHB1ENR` register.
 * Enables the clock for **USART1** by setting Bit 4 (`RCC_APB2ENR_USART1EN`) in the `RCC_APB2ENR` register.
 
