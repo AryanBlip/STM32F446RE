@@ -52,3 +52,5 @@ The initialization and runtime flow follow a deterministic register-level sequen
 * Calls the core execution routine which continually checks the `USART1_ISR` register flag and `USART_ISR_RXNE` (Receive Data Register Not Empty).
 * When a byte arrives, it reads `USART1_DR`, evaluates the control conditions, updates the output register for `PA5` to execute the LED toggling,
 * and pushes the corresponding response string through `USART1_DR` by polling the `USART_ISR_TXE` (Transmit Data Register Empty) flag.
+
+### NOTE: A bluetooth module such as an HC05 can be connected to the RX/TX pins with a voltage divider circuit to wirelessly control the onboard LED.
